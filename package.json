@@ -1,0 +1,13 @@
+{
+  "name": "backend-challenge-node",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:thiagofo92/backend-challenge-node.git",
+  "author": "Thiago Ferreira <desenvolimento.oliveira@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "ts-node": "^10.9.1",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^4.9.3"
+  }
+}
