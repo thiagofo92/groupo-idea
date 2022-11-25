@@ -1,5 +1,6 @@
 import { describe, vi, expect, test } from 'vitest'
 import { faker } from '@faker-js/faker'
+import { Either, right } from '@/shared/errors/Either'
 
 
 interface ClientModel {
@@ -9,9 +10,9 @@ interface ClientModel {
 
 interface Client {
   nome: string
-cpf: string
-dtNascimento: Date
-ativo: boolean
+  cpf: string
+  dtNascimento: Date
+  ativo: boolean
 }
 
 class ClientEntity {
@@ -36,27 +37,33 @@ class ClientEntity {
 }
 
 interface BaseUseCaseContract<T, K> {
-  create: (data: T) => Promise<any>
-  load: () => Promise<K[]>
+  create: (data: T) => Promise<Either<Error, any>>
+  load: () => Promise<Either<Error, K[]>>
 }
 
 interface ClientUseCaseContract extends BaseUseCaseContract <ClientEntity, ClientModel> {
-  create: (data: ClientEntity) => Promise<ClientModel>
-  load: () => Promise<[]>
+  create: (data: ClientEntity) => Promise<Either<ClientCreateUseCaseError, ClientModel>>
+  load: () => Promise<Either<Error, []>>
 }
 
+export class ClientCreateUseCaseError extends Error {
+  constructor(message: string ) {
+    super(message)
+    this.name = 'ClientCreateUseCaseError'
+  }
+}
 
 export class ClientUseCase implements ClientUseCaseContract {
-  async create (data: ClientEntity): Promise<ClientModel> {
+  async create (data: ClientEntity): Promise<Either<ClientCreateUseCaseError, ClientModel>> {
     const client: ClientModel = {
       idClient: 1,
       nome: data.nome
     }
-    return client
+    return right(client)
   }
 
-  async load(): Promise<any> {
-
+  async load(): Promise<Either<Error, any[]>> {
+    return {} as any
   }
 
 }
@@ -75,13 +82,16 @@ describe('# Use case create a client', () => {
       cpf: '11122233344',
       ativo: true
     }
-
     const client = new ClientEntity(clientMock)
     const result = await sut.create(client)
+    
+    if(result.isLeft()) throw result.value
+
+    const { value } = result
 
     expect(client.legalAge()).toStrictEqual(true)
-    expect(result.idClient).not.toBeUndefined()
-    expect(result.nome).toStrictEqual(client.nome)
+    expect(value.idClient).not.toBeUndefined()
+    expect(value.nome).toStrictEqual(client.nome)
   })
 
   test('Fail to create the user', async () => {
@@ -97,7 +107,7 @@ describe('# Use case create a client', () => {
     const result = await sut.create(client)
 
     expect(result.idClient).not.toBeUndefined()
-    expect(result.nome).toStrictEqual(client.nome) 
+    expect(result.nome).toStrictEqual(client.nome)
   })
 
   test('Error to create the client that is under eighteen years old', async () => {
