@@ -22,17 +22,18 @@ class ClientEntity {
   ativo: boolean
 
   constructor({nome, cpf, dtNascimento, ativo}: Client) {
-
-    if(dtNascimento.getFullYear() - new Date().getFullYear() < 18) {
-    }
-
     this.nome = nome
     this.cpf = cpf
     this.dtNascimento = dtNascimento
     this.ativo = ativo
   }
-}
 
+  legalAge(): boolean {
+    if(new Date().getFullYear() - this.dtNascimento.getFullYear() >= 18) return true
+
+    return false
+  }
+}
 
 interface BaseUseCaseContract<T, K> {
   create: (data: T) => Promise<any>
@@ -47,7 +48,11 @@ interface ClientUseCaseContract extends BaseUseCaseContract <ClientEntity, Clien
 
 export class ClientUseCase implements ClientUseCaseContract {
   async create (data: ClientEntity): Promise<ClientModel> {
-    return true
+    const client: ClientModel = {
+      idClient: 1,
+      nome: data.nome
+    }
+    return client
   }
 
   async load(): Promise<any> {
@@ -56,9 +61,31 @@ export class ClientUseCase implements ClientUseCaseContract {
 
 }
 
+function factoryClienUseCase() {
+  const sut = new ClientUseCase()
+  return { sut }
+}
+
 describe('# Use case create a client', () => {
   test('# Create a client', async () => {
-    const sut = new ClientUseCase()
+    const { sut } = factoryClienUseCase()
+    const clientMock = {
+      nome: faker.name.fullName(),
+      dtNascimento: faker.date.birthdate({ min: 18, max: 70, mode: 'age'}),
+      cpf: '11122233344',
+      ativo: true
+    }
+
+    const client = new ClientEntity(clientMock)
+    const result = await sut.create(client)
+
+    expect(client.legalAge()).toStrictEqual(true)
+    expect(result.idClient).not.toBeUndefined()
+    expect(result.nome).toStrictEqual(client.nome)
+  })
+
+  test('Fail to create the user', async () => {
+    const { sut } = factoryClienUseCase()
     const client: ClientEntity = {
       nome: faker.name.fullName(),
       dtNascimento: faker.date.birthdate({ min: 18, max: 70, mode: 'age'}),
@@ -68,7 +95,8 @@ describe('# Use case create a client', () => {
     const result = await sut.create(client)
 
     expect(result.idClient).not.toBeUndefined()
-    expect(result.nome).toStrictEqual(client.nome)
+    expect(result.nome).toStrictEqual(client.nome) 
   })
-  test.todo('')
+
+  test.todo('Fail to create the client under eighteen years old')
 })
