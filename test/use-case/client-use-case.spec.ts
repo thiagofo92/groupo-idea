@@ -93,5 +93,4 @@ describe('# Use case create a client', () => {
     const loadClient = await sut.load()
     expect(loadClient.value).instanceOf(ClientLoadServiceError)
   })
-
 })
