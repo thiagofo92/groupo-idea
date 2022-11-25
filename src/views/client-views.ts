@@ -4,8 +4,8 @@ import { ClientModel } from '@/use-case/model'
 export class ClientViews {
   fromEntity(client: ClientEntity): ClientModel {
     return {
-      idClient: client.idCliente!,
-      nome: client.nome
+      idClient: client.idClient!,
+      nome: client.name
     }
   }
 }
