@@ -11,18 +11,18 @@ import { ClientServiceMock } from '../mock/service'
 function factoryClienUseCase() {
   const clientService = new ClientServiceMock()
   const sut = new ClientUseCase(clientService)
-  return { sut, clientService }
+  const clientMock = {
+    name: faker.name.fullName(),
+    birthday: faker.date.birthdate({ min: 18, max: 70, mode: 'age'}),
+    cpf: '11122233344',
+    active: true
+  }
+  return { sut, clientService, clientMock }
 }
 
 describe('# Use case create a client', () => {
   test('# Create a client', async () => {
-    const { sut } = factoryClienUseCase()
-    const clientMock = {
-      nome: faker.name.fullName(),
-      dtNascimento: faker.date.birthdate({ min: 18, max: 70, mode: 'age'}),
-      cpf: '11122233344',
-      ativo: true
-    }
+    const { sut, clientMock } = factoryClienUseCase()
     const client = new ClientEntity(clientMock)
     const result = await sut.create(client)
     
@@ -31,17 +31,11 @@ describe('# Use case create a client', () => {
     const { value } = result
 
     expect(value.idClient).not.toBeUndefined()
-    expect(value.nome).toStrictEqual(client.nome)
+    expect(value.nome).toStrictEqual(client.name)
   })
 
   test('Fail to create the user', async () => {
-    const { sut, clientService } = factoryClienUseCase()
-    const clientMock = {
-      nome: faker.name.fullName(),
-      dtNascimento: faker.date.birthdate({ min: 18, max: 70, mode: 'age'}),
-      cpf: '11122233344',
-      ativo: true
-    }
+    const { sut, clientService, clientMock } = factoryClienUseCase()
     vi.spyOn(clientService, 'create').mockResolvedValueOnce(left(new ClientCreateServiceError('Test mock service')))
     const client = new ClientEntity(clientMock)
     const result = await sut.create(client)
@@ -52,10 +46,10 @@ describe('# Use case create a client', () => {
   test('Fail to create the user, because the client does not is of legal age', async () => {
     const { sut } = factoryClienUseCase()
     const clientMock = {
-      nome: faker.name.fullName(),
-      dtNascimento: faker.date.birthdate({ min: 16, max: 17, mode: 'age'}),
+      name: faker.name.fullName(),
+      birthday: faker.date.birthdate({ min: 16, max: 17, mode: 'age'}),
       cpf: '11122233344',
-      ativo: true
+      active: true
     }
 
     const client = new ClientEntity(clientMock)
@@ -65,13 +59,7 @@ describe('# Use case create a client', () => {
   })
 
   test('# Load a client', async () => {
-    const { sut } = factoryClienUseCase()
-    const clientMock = {
-      nome: faker.name.fullName(),
-      dtNascimento: faker.date.birthdate({ min: 18, max: 70, mode: 'age'}),
-      cpf: '11122233344',
-      ativo: true
-    }
+    const { sut, clientMock } = factoryClienUseCase()
     const client = new ClientEntity(clientMock)
     const createdClient = await sut.create(client)
     if(createdClient.isLeft()) throw createdClient.value
@@ -84,7 +72,7 @@ describe('# Use case create a client', () => {
 
     expect(value.length).toBeGreaterThan(0)
     expect(value[0].idClient).not.toBeUndefined()
-    expect(value[0].nome).toStrictEqual(client.nome)
+    expect(value[0].nome).toStrictEqual(client.name)
   })
 
   test('Fail to load the client', async () => {
