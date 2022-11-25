@@ -3,14 +3,14 @@ import { ClientServiceContract } from '@/services/contract/client-contract'
 import { ClientCreateServiceError, ClientLoadServiceError } from '@/services/error'
 import { Either, right, left } from '@/shared/errors/Either'
 import { ClientModel } from '@/use-case/model'
-import { ClientViews } from '@/views/client-views'
+import { ClientViews } from '@/views'
 import { faker } from '@faker-js/faker'
 
 export class ClientServiceMock implements ClientServiceContract {
   private clientMock: ClientEntity[] = []
   async create(data: ClientEntity): Promise<Either<ClientCreateServiceError, ClientModel>> {
     try {
-      data.idCliente = 1
+      data.idClient = 1
       this.clientMock.push(data)
       const clientView = new ClientViews()
       const resultView = clientView.fromEntity(data)
