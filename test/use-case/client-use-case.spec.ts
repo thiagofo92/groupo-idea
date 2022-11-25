@@ -86,17 +86,32 @@ describe('# Use case create a client', () => {
 
   test('Fail to create the user', async () => {
     const { sut } = factoryClienUseCase()
-    const client: ClientEntity = {
+    const clientMock = {
       nome: faker.name.fullName(),
       dtNascimento: faker.date.birthdate({ min: 18, max: 70, mode: 'age'}),
       cpf: '11122233344',
       ativo: true
     }
+
+    const client = new ClientEntity(clientMock)
     const result = await sut.create(client)
 
     expect(result.idClient).not.toBeUndefined()
     expect(result.nome).toStrictEqual(client.nome) 
   })
 
-  test.todo('Fail to create the client under eighteen years old')
+  test('Error to create the client that is under eighteen years old', async () => {
+    const { sut } = factoryClienUseCase()
+    const clientMock = {
+      nome: faker.name.fullName(),
+      dtNascimento: faker.date.birthdate({ min: 10, max: 16, mode: 'age'}),
+      cpf: '11122233344',
+      ativo: true
+    }
+
+    const client = new ClientEntity(clientMock)
+    const result = await sut.create(client)
+
+    expect(client.legalAge()).toStrictEqual(false)
+  })
 })
