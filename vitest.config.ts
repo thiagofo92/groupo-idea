@@ -10,5 +10,10 @@ export default defineConfig({
       statements: 80,
       lines: 80
     }
+  },
+  resolve: {
+    alias: {
+      '@': `${path}/src`
+    }
   }
 })
