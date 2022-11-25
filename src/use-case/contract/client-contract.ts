@@ -3,9 +3,8 @@ import { ClientCreateServiceError, ClientLoadServiceError } from '@/services/err
 import { Either } from '@/shared/errors/Either'
 import { ClientCreateUseCaseError } from '../error'
 import { ClientModel } from '../model'
-import { BaseUseCaseContract } from './base-contract'
 
-export interface ClientUseCaseContract extends BaseUseCaseContract <ClientEntity, ClientModel> {
+export interface ClientUseCaseContract {
   create: (data: ClientEntity) => Promise<Either<ClientCreateUseCaseError | ClientCreateServiceError, ClientModel>>
   load: () => Promise<Either<ClientLoadServiceError, ClientModel[]>>
 }
