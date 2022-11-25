@@ -1,4 +1,5 @@
 import { describe, vi, expect, test } from 'vitest'
+import { faker } from '@faker-js/faker'
 
 
 interface ClientModel {
@@ -58,9 +59,16 @@ export class ClientUseCase implements ClientUseCaseContract {
 describe('# Use case create a client', () => {
   test('# Create a client', async () => {
     const sut = new ClientUseCase()
-    const result = await sut.create()
+    const client: ClientEntity = {
+      nome: faker.name.fullName(),
+      dtNascimento: faker.date.birthdate({ min: 18, max: 70, mode: 'age'}),
+      cpf: '11122233344',
+      ativo: true
+    }
+    const result = await sut.create(client)
 
-    expect(result).toStrictEqual(true)
+    expect(result.idClient).not.toBeUndefined()
+    expect(result.nome).toStrictEqual(client.nome)
   })
   test.todo('')
 })
