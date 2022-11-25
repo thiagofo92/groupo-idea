@@ -7,10 +7,10 @@ export class ClientService implements ClientServiceContract  {
   async create(): Promise<Either<ClientCreateServiceError, ClientEntity>> {
     try {
       const result: ClientEntity = {
-        nome: '',
+        name: '',
         cpf: '',
-        dtNascimento: new Date(new Date().setFullYear(1992)),
-        ativo: true,
+        birthday: new Date(new Date().setFullYear(1992)),
+        active: true,
         legalAge: function (): boolean {
           throw new Error('Function not implemented.')
         }
@@ -24,10 +24,10 @@ export class ClientService implements ClientServiceContract  {
   async load(): Promise<Either<ClientLoadServiceError, ClientEntity[]>> {
     try {
       const result: ClientEntity = {
-        nome: '',
+        name: '',
         cpf: '',
-        dtNascimento: new Date(new Date().setFullYear(1992)),
-        ativo: true,
+        birthday: new Date(new Date().setFullYear(1992)),
+        active: true,
         legalAge: function (): boolean {
           throw new Error('Function not implemented.')
         }
