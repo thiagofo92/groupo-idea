@@ -1,26 +1,26 @@
 interface Client {
-  nome: string
+  name: string
   cpf: string
-  dtNascimento: Date
-  ativo: boolean
+  birthday: Date
+  active: boolean
 }
 
 export class ClientEntity {
-  idCliente?: number
-  nome: string
+  idClient?: number
+  name: string
   cpf: string
-  dtNascimento: Date
-  ativo: boolean
+  birthday: Date
+  active: boolean
 
-  constructor({nome, cpf, dtNascimento, ativo}: Client) {
-    this.nome = nome
+  constructor({name, cpf, birthday, active}: Client) {
+    this.name = name
     this.cpf = cpf
-    this.dtNascimento = dtNascimento
-    this.ativo = ativo
+    this.birthday = birthday
+    this.active = active
   }
 
   legalAge(): boolean {
-    if(new Date().getFullYear() - this.dtNascimento.getFullYear() >= 18) return true
+    if(new Date().getFullYear() - this.birthday.getFullYear() >= 18) return true
 
     return false
   }
