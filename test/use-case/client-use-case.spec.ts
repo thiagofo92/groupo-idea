@@ -1,57 +1,10 @@
 import { describe, vi, expect, test } from 'vitest'
 import { faker } from '@faker-js/faker'
 import { Either, right } from '@/shared/errors/Either'
-
-
-interface ClientModel {
-  idClient: number
-  nome: string
-}
-
-interface Client {
-  nome: string
-  cpf: string
-  dtNascimento: Date
-  ativo: boolean
-}
-
-class ClientEntity {
-  idCliente?: number
-  nome: string
-  cpf: string
-  dtNascimento: Date
-  ativo: boolean
-
-  constructor({nome, cpf, dtNascimento, ativo}: Client) {
-    this.nome = nome
-    this.cpf = cpf
-    this.dtNascimento = dtNascimento
-    this.ativo = ativo
-  }
-
-  legalAge(): boolean {
-    if(new Date().getFullYear() - this.dtNascimento.getFullYear() >= 18) return true
-
-    return false
-  }
-}
-
-interface BaseUseCaseContract<T, K> {
-  create: (data: T) => Promise<Either<Error, any>>
-  load: () => Promise<Either<Error, K[]>>
-}
-
-interface ClientUseCaseContract extends BaseUseCaseContract <ClientEntity, ClientModel> {
-  create: (data: ClientEntity) => Promise<Either<ClientCreateUseCaseError, ClientModel>>
-  load: () => Promise<Either<Error, []>>
-}
-
-export class ClientCreateUseCaseError extends Error {
-  constructor(message: string ) {
-    super(message)
-    this.name = 'ClientCreateUseCaseError'
-  }
-}
+import { ClientEntity } from '@/domain/entities/client-entity'
+import { ClientUseCaseContract } from '@/usecase/contract'
+import { ClientCreateUseCaseError } from '@/usecase/error'
+import { ClientModel } from '@/usecase/model'
 
 export class ClientUseCase implements ClientUseCaseContract {
   async create (data: ClientEntity): Promise<Either<ClientCreateUseCaseError, ClientModel>> {
