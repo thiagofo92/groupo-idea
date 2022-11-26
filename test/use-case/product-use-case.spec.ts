@@ -1,81 +1,64 @@
 import { describe, vi, expect, test } from 'vitest'
 import { faker } from '@faker-js/faker'
 import { left } from '@/shared/errors/Either'
-import { ProductEntity } from '@/domain/entities'
 import { ProductUseCase } from '@/use-case'
 import { ProductCreateServiceError, ProductLoadServiceError } from '@/services/error'
 import { ProductServiceMock } from '../mock/service'
-
+import { ProductModel } from './model/product-model'
 
 function factoryClienUseCase() {
   const productService = new ProductServiceMock()
   const sut = new ProductUseCase(productService)
-  return { sut, productService }
+  const productMock: ProductModel = {
+    name: faker.commerce.product(),
+    active: true,
+  }
+
+  return { sut, productService, productMock }
 }
 
 describe('# Use case create a product', () => {
   test('# Create a product', async () => {
-    const { sut } = factoryClienUseCase()
-    const clientMock = {
-      nome: faker.name.fullName(),
-      dtNascimento: faker.date.birthdate({ min: 18, max: 70, mode: 'age'}),
-      cpf: '11122233344',
-      ativo: true
-    }
-    const client = new ClientEntity(clientMock)
-    const result = await sut.create(client)
+    const { sut, productMock } = factoryClienUseCase()
+
+    const result = await sut.create(productMock)
     
     if(result.isLeft()) throw result.value
 
     const { value } = result
-
-    expect(value.idClient).not.toBeUndefined()
-    expect(value.nome).toStrictEqual(client.name)
+    expect(value.idProduct).not.toBeUndefined()
+    expect(value.name).toStrictEqual(productMock.name)
   })
 
-  // test('Fail to create the product', async () => {
-  //   const { sut, productService } = factoryClienUseCase()
-  //   const clientMock = {
-  //     nome: faker.name.fullName(),
-  //     dtNascimento: faker.date.birthdate({ min: 18, max: 70, mode: 'age'}),
-  //     cpf: '11122233344',
-  //     ativo: true
-  //   }
-  //   vi.spyOn(productService, 'create').mockResolvedValueOnce(left(new ClientCreateServiceError('Test mock service')))
-  //   const client = new ClientEntity(clientMock)
-  //   const result = await sut.create(client)
+  test('Fail to create the product', async () => {
+    const { sut, productService, productMock } = factoryClienUseCase()
+  
+    vi.spyOn(productService, 'create').mockResolvedValueOnce(left(new ProductCreateServiceError('Test mock service')))
 
-  //   expect(result.value).instanceOf(ClientCreateServiceError)
-  // })
+    const result = await sut.create(productMock)
 
+    expect(result.value).instanceOf(ProductCreateServiceError)
+  })
 
-  // test('# Load a product', async () => {
-  //   const { sut } = factoryClienUseCase()
-  //   const clientMock = {
-  //     nome: faker.name.fullName(),
-  //     dtNascimento: faker.date.birthdate({ min: 18, max: 70, mode: 'age'}),
-  //     cpf: '11122233344',
-  //     ativo: true
-  //   }
-  //   const client = new ClientEntity(clientMock)
-  //   const createdClient = await sut.create(client)
-  //   if(createdClient.isLeft()) throw createdClient.value
+  test('# Load a product', async () => {
+    const { sut, productMock } = factoryClienUseCase()
 
-  //   const loadClient = await sut.load()
+    const createdClient = await sut.create(productMock)
+    if(createdClient.isLeft()) throw createdClient.value
 
-  //   if(loadClient.isLeft()) throw loadClient.value
+    const loadClient = await sut.load()
 
-  //   const { value } = loadClient
+    if(loadClient.isLeft()) throw loadClient.value
 
-  //   expect(value.length).toBeGreaterThan(0)
-  //   expect(value[0].idClient).not.toBeUndefined()
-  //   expect(value[0].nome).toStrictEqual(client.name)
-  // })
+    const { value } = loadClient
 
-  // test('Fail to load the product', async () => {
-  //   const { sut, productService } = factoryClienUseCase()
-  //   vi.spyOn(productService, 'load').mockResolvedValueOnce(left(new ClientLoadServiceError('Test mock service')))
-  //   const loadClient = await sut.load()
-  //   expect(loadClient.value).instanceOf(ClientLoadServiceError)
-  // })
+    expect(value.length).toBeGreaterThan(0)
+  })
+
+  test('Fail to load the product', async () => {
+    const { sut, productService } = factoryClienUseCase()
+    vi.spyOn(productService, 'load').mockResolvedValueOnce(left(new ProductLoadServiceError('Test mock service')))
+    const loadClient = await sut.load()
+    expect(loadClient.value).instanceOf(ProductLoadServiceError)
+  })
 })
