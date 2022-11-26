@@ -1,8 +1,8 @@
 import { ClientEntity } from '@/domain/entities'
-import { ClientModel } from '@/use-case/model'
+import { ClientCreateModel } from '@/use-case/model'
 
 export class ClientViews {
-  fromEntity(client: ClientEntity): ClientModel {
+  fromEntity(client: ClientEntity): ClientCreateModel {
     return {
       idClient: client.idClient!,
       nome: client.name
