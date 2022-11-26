@@ -1,5 +1,5 @@
 export interface ProductEntity {
-  idProduct: number
+  idProduct?: number
   name: string
   active: boolean
 }
