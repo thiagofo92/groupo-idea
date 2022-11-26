@@ -1,7 +1,9 @@
+import { ProductEntity } from '@/domain/entities'
 import { Either } from '@/shared/errors/Either'
+import { ProductModel } from '@/use-case/model'
 import { ProductCreateServiceError, ProductLoadServiceError } from '../error'
 
 export interface ProductServiceContract {
-  create: () => Promise<Either<ProductCreateServiceError, any>>
-  load: () => Promise<Either<ProductLoadServiceError, any>>
+  create: (data: ProductEntity) => Promise<Either<ProductCreateServiceError, ProductModel>>
+  load: () => Promise<Either<ProductLoadServiceError, ProductModel[]>>
 }
