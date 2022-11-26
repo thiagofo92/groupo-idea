@@ -2,21 +2,19 @@ interface Client {
   name: string
   cpf: string
   birthday: Date
-  active: boolean
 }
 
 export class ClientEntity {
-  idClient?: number
   name: string
   cpf: string
   birthday: Date
   active: boolean
 
-  constructor({name, cpf, birthday, active}: Client) {
+  constructor({ name, cpf, birthday }: Client) {
     this.name = name
     this.cpf = cpf
     this.birthday = birthday
-    this.active = active
+    this.active = true
   }
 
   legalAge(): boolean {
