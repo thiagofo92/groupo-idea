@@ -1,5 +1,5 @@
-export interface Order {
-  idTransaction: number
+export interface OrderEntity {
+  idTransaction?: number
   idClient: number
   idProduct: number
   purchasesPrice: number
