@@ -4,6 +4,6 @@ export interface OrderEntity {
   idProduct: number
   purchasesPrice: number
   purchasesCount: number
-  purchasesLimit: number
+  purchasesTotalPrice: number
   createdAt: Date
 }
