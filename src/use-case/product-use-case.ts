@@ -3,11 +3,11 @@ import { ProductServiceContract } from '@/services/contract'
 import { ProductCreateServiceError, ProductLoadServiceError } from '@/services/error'
 import { Either, left, right } from '@/shared/errors/Either'
 import { ProductUseCaseContract } from './contract/product-contract'
-import { ProductModel } from './model/product-model'
+import { ProducCreatetModel } from './model/product-model'
 
 export class ProductUseCase implements ProductUseCaseContract {
   constructor(private readonly productService: ProductServiceContract) {}
-  async create (data: ProductModel): Promise<Either<ProductCreateServiceError, ProductEntity>> {
+  async create (data: ProducCreatetModel): Promise<Either<ProductCreateServiceError, ProductEntity>> {
     const createdProduct = await this.productService.create(data)
     if(createdProduct.isRight()) return right(createdProduct.value)
 
