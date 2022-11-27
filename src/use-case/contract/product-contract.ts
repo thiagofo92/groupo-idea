@@ -1,9 +1,9 @@
 import { Either } from '@/shared/errors/Either'
 import { ProductCreateServiceError, ProductLoadServiceError } from '@/services/error'
 import { ProductEntity } from '@/domain/entities'
-import { ProducCreatetModel, ProducResponseModel } from '../model'
+import { ProducCreatetModel, ProductCreateResponseModel } from '../model'
 
 export interface ProductUseCaseContract  {
-  create: (data: ProducCreatetModel) => Promise<Either<ProductCreateServiceError, ProducResponseModel>>
-  load: () => Promise<Either<ProductLoadServiceError, ProducResponseModel[]>>
+  create: (data: ProducCreatetModel) => Promise<Either<ProductCreateServiceError, ProductCreateResponseModel>>
+  load: () => Promise<Either<ProductLoadServiceError, ProductCreateResponseModel[]>>
 }
