@@ -1,17 +1,17 @@
 import { OrderEntity } from '@/domain/entities'
-import { OrderServiceContract } from '@/services/contract/order-contract'
+import { OrderServiceContract } from '@/services/contract'
 import { OrderCreateServiceError, OrderLoadServiceError } from '@/services/error'
 import { Either, right, left } from '@/shared/errors/Either'
-import { OrderResponseModel } from '@/use-case/model'
-import { OrderViews } from '@/views'
+import { OrderCreateResponseModel } from '@/use-case/model'
+import { OrderView } from '@/views'
 
-export class orderServiceMock implements OrderServiceContract {
+export class OrderServiceMock implements OrderServiceContract {
   private orderMock: OrderEntity[] = []
-  async create(data: OrderCreateResponseModel): Promise<Either<OrderCreateServiceError, OrderCreateResponseModel>> {
+  async create(data: OrderEntity): Promise<Either<OrderCreateServiceError, OrderCreateResponseModel>> {
     try {
-      data.idorder = 1
+      data.idTransaction = 1
       this.orderMock.push(data)
-      const orderView = new orderViews()
+      const orderView = new OrderView()
       const resultView = orderView.fromEntity(data)
       return right(resultView)
     } catch (error: any) {
@@ -21,7 +21,7 @@ export class orderServiceMock implements OrderServiceContract {
 
   async load(): Promise<Either<OrderLoadServiceError, OrderCreateResponseModel[]>> {
     try {
-      const orderView = new orderViews()
+      const orderView = new OrderView()
       const resultView = this.orderMock.map<OrderCreateResponseModel>(item => orderView.fromEntity(item))
       return right(resultView)
     } catch (error: any) {
