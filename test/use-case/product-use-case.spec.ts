@@ -4,12 +4,12 @@ import { left } from '@/shared/errors/Either'
 import { ProductUseCase } from '@/use-case'
 import { ProductCreateServiceError, ProductLoadServiceError } from '@/services/error'
 import { ProductServiceMock } from '../mock/service'
-import { ProductModel } from './model/product-model'
+import { ProducCreatetModel } from './model/product-model'
 
 function factoryClienUseCase() {
   const productService = new ProductServiceMock()
   const sut = new ProductUseCase(productService)
-  const productMock: ProductModel = {
+  const productMock: ProducCreatetModel = {
     name: faker.commerce.product(),
     active: true,
   }
