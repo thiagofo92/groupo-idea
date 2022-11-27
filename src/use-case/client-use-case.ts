@@ -32,6 +32,6 @@ export class ClientUseCase implements ClientUseCaseContract {
 
     if(result.isLeft()) return left(result.value)
 
-    return right(result.value as any)
+    return right(result.value)
   }
 }

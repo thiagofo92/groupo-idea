@@ -5,6 +5,7 @@ interface Client {
 }
 
 export class ClientEntity {
+  idClient?: number
   name: string
   cpf: string
   birthday: Date

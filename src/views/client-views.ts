@@ -1,10 +1,10 @@
 import { ClientEntity } from '@/domain/entities'
-import { ClientCreateModel } from '@/use-case/model'
+import { ClientCreateResponseModel } from '@/use-case/model'
 
 export class ClientViews {
-  fromEntity(client: ClientEntity): ClientCreateModel {
+  fromEntity(client: ClientEntity): ClientCreateResponseModel {
     return {
-      idClient: client.idClient!,
+      idCliente: client.idClient!,
       nome: client.name
     }
   }

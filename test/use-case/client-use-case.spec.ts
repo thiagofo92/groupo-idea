@@ -1,7 +1,6 @@
 import { describe, vi, expect, test } from 'vitest'
 import { faker } from '@faker-js/faker'
 import { left } from '@/shared/errors/Either'
-import { ClientEntity } from '@/domain/entities/client-entity'
 import { ClientUseCase } from '@/use-case'
 import { ClientCreateUseCaseError } from '@/use-case/error'
 import { ClientCreateServiceError, ClientLoadServiceError } from '@/services/error'
@@ -29,7 +28,7 @@ describe('# Use case create a client', () => {
 
     const { value } = result
 
-    expect(value.idClient).not.toBeUndefined()
+    expect(value.idCliente).not.toBeUndefined()
     expect(value.nome).toStrictEqual(clientMock.nome)
   })
 
@@ -67,8 +66,6 @@ describe('# Use case create a client', () => {
     const { value } = loadClient
 
     expect(value.length).toBeGreaterThan(0)
-    expect(value[0].idClient).not.toBeUndefined()
-    expect(value[0].nome).toStrictEqual(clientMock.nome)
   })
 
   test('Fail to load the client', async () => {

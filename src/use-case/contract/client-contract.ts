@@ -4,6 +4,7 @@ import { ClientCreateUseCaseError } from '../error'
 import { ClientCreateModel, ClientCreateResponseModel } from '../model'
 
 export interface ClientUseCaseContract {
-  create: (data: ClientCreateModel) => Promise<Either<ClientCreateUseCaseError | ClientCreateServiceError, ClientCreateResponseModel>>
+  create: (data: ClientCreateModel) => 
+  Promise<Either<ClientCreateUseCaseError | ClientCreateServiceError, ClientCreateResponseModel>>
   load: () => Promise<Either<ClientLoadServiceError, ClientCreateResponseModel[]>>
 }

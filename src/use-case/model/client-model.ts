@@ -5,6 +5,6 @@ export interface ClientCreateModel {
 }
 
 export interface ClientCreateResponseModel {
-  idClient: number
+  idCliente: number
   nome: string
 }
