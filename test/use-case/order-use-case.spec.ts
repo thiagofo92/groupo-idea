@@ -22,52 +22,48 @@ function factoryClienUseCase() {
 describe('# Use case create a order', () => {
   test('# Create a order', async () => {
     const { sut, ordertMock } = factoryClienUseCase()
+    const total = new Intl.NumberFormat('en-US', { style: 'decimal' })
+      .format(ordertMock.purchasesPrice * ordertMock.purchasesCount)
 
-    console.log(ordertMock)
-    console.log(ordertMock.purchasesPrice)
-    console.log(new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' })
-      .format(ordertMock.purchasesPrice * ordertMock.purchasesCount))
-
-    // const result = await sut.create(ordertMock)
+    const result = await sut.create(ordertMock)
     
-    // if(result.isLeft()) throw result.value
+    if(result.isLeft()) throw result.value
 
-    // const { value } = result
+    const { value } = result
     
-
-    // expect(value.idProduct).not.toBeUndefined()
-    // expect(value.name).toStrictEqual(productMock.name)
+    expect(value.purchasesTotalPrice).toStrictEqual(parseFloat(total))
+    expect(value.idTransaction).not.toBeUndefined()
   })
 
-  // test('Fail to create the order', async () => {
-  //   const { sut, orderService, ordertMock } = factoryClienUseCase()
+  test('Fail to create the order', async () => {
+    const { sut, orderService, ordertMock } = factoryClienUseCase()
   
-  //   vi.spyOn(orderService, 'create').mockResolvedValueOnce(left(new OrderCreateServiceError('Test mock service')))
+    vi.spyOn(orderService, 'create').mockResolvedValueOnce(left(new OrderCreateServiceError('Test mock service')))
 
-  //   const result = await sut.create(ordertMock)
+    const result = await sut.create(ordertMock)
 
-  //   expect(result.value).instanceOf(OrderCreateServiceError)
-  // })
+    expect(result.value).instanceOf(OrderCreateServiceError)
+  })
 
-  // test('# Load a order', async () => {
-  //   const { sut, ordertMock } = factoryClienUseCase()
+  test('# Load a order', async () => {
+    const { sut, ordertMock } = factoryClienUseCase()
 
-  //   const createdClient = await sut.create(ordertMock)
-  //   if(createdClient.isLeft()) throw createdClient.value
+    const createdClient = await sut.create(ordertMock)
+    if(createdClient.isLeft()) throw createdClient.value
 
-  //   const loadClient = await sut.load()
+    const loadClient = await sut.load()
 
-  //   if(loadClient.isLeft()) throw loadClient.value
+    if(loadClient.isLeft()) throw loadClient.value
 
-  //   const { value } = loadClient
+    const { value } = loadClient
 
-  //   expect(value.length).toBeGreaterThan(0)
-  // })
+    expect(value.length).toBeGreaterThan(0)
+  })
 
-  // test('Fail to load the order', async () => {
-  //   const { sut, orderService } = factoryClienUseCase()
-  //   vi.spyOn(orderService, 'load').mockResolvedValueOnce(left(new OrderLoadServiceError('Test mock service')))
-  //   const loadClient = await sut.load()
-  //   expect(loadClient.value).instanceOf(OrderLoadServiceError)
-  // })
+  test('Fail to load the order', async () => {
+    const { sut, orderService } = factoryClienUseCase()
+    vi.spyOn(orderService, 'load').mockResolvedValueOnce(left(new OrderLoadServiceError('Test mock service')))
+    const loadClient = await sut.load()
+    expect(loadClient.value).instanceOf(OrderLoadServiceError)
+  })
 })
