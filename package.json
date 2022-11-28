@@ -18,6 +18,8 @@
   },
   "scripts": {
     "test": "vitest",
-    "test:cov": "vitest --coverage"
+    "test:cov": "vitest --coverage",
+    "docker:up": "docker-compose -f ./docker/docker-compose.yml up -d",
+    "docker:build": "docker-compose -f ./docker/docker-compose.yml up -d"
   }
 }
