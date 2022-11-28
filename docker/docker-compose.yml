@@ -1,0 +1,14 @@
+version: '3.8'
+
+services: 
+    grupo-idea:
+        image: mysql:latest
+        container_name: grupo-idea
+        restart: always
+        ports:
+            -   '3306:3306'
+        environment:
+            MYSQL_ROOT_PASSWORD: 43211234
+            MYSQL_USER: admin
+            MYSQL_PASSWORD: 43211234
+            MYSQL_DATABASE: grupo-idea
