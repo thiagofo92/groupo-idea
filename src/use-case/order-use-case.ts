@@ -1,3 +1,4 @@
+import { OrderEntity } from '@/domain/entities'
 import { OrderServiceContract } from '@/services/contract'
 import { OrderCreateServiceError, OrderLoadServiceError } from '@/services/error'
 import { Either, left, right } from '@/shared/errors/Either'
@@ -7,7 +8,18 @@ import { OrderCreateModel, OrderCreateResponseModel } from './model/order-model'
 export class OrderUseCase implements OrderUseCaseContract {
   constructor(private readonly OrderService: OrderServiceContract) {}
   async create (data: OrderCreateModel): Promise<Either<OrderCreateServiceError, OrderCreateResponseModel>> {
-    const createdOrder = await this.OrderService.create(data)
+    const total = new Intl.NumberFormat('en-US', { style: 'decimal' })
+      .format(data.purchasesPrice * data.purchasesCount)
+
+    const orderEntity: OrderEntity = {
+      idClient: data.idClient,
+      idProduct: data.idProduct,
+      purchasesPrice: data.purchasesPrice,
+      purchasesCount: data.purchasesCount,
+      purchasesTotalPrice: parseFloat(total)
+    }
+    
+    const createdOrder = await this.OrderService.create(orderEntity)
     if(createdOrder.isRight()) return right(createdOrder.value)
 
     return left(createdOrder.value)
