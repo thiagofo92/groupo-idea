@@ -14,11 +14,11 @@
   * Execute o comando **npx migrate:create ou yarn migrate:create** para criar as tabelas no banco de dados
   * Execute o comando **npx test ou yarn test** para verificar se está tudo funcionando
   * Execute o comando **npx dev:server ou yarn dev:server** para iniciar o servidor
-  * Após o servidor ter sido iniciado acesse [Swagger API](https://localhost:4500/api-docs) para efetuar os testes
+  * Após o servidor ter sido iniciado acesse [Swagger API - Localhost](https://localhost:4500/api-docs) para efetuar os testes
 
 
 ## Utilizar a API
-  Acesse a página do [Swagger API](https://localhost:4500/api-docs) para visualizar todas as rotas disponiveis e os dados para criação de dados de retorno.
+  Acesse a página do [Swagger API - Localhost](https://localhost:4500/api-docs) para visualizar todas as rotas disponiveis e os dados para criação de dados de retorno, após o servidor ter sido iniciado.
   O projeto também contém um arquivo do [Postman](https://www.postman.com/) para caso prefira utilizar o postman para efetuar as consultas.
   A API possui um rate limit de 50 requisições por minuto
 
