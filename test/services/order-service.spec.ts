@@ -1,6 +1,5 @@
 import { describe, test, expect, beforeEach, vi } from 'vitest'
 import { OrderService, ClientService, ProductService } from '@/services'
-import { Prisma } from '@/services/db/prisma'
 import { ClientEntity, OrderEntity, ProductEntity } from '@/domain/entities'
 import { faker } from '@faker-js/faker'
 import { OrderCreateServiceError } from '@/services/error'
