@@ -14,7 +14,7 @@ export class ClientEntity {
   constructor({ name, cpf, birthday }: Client) {
     this.name = name
     this.cpf = cpf
-    this.birthday = birthday
+    this.birthday = new Date(birthday)
     this.active = true
   }
 
