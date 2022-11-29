@@ -12,11 +12,11 @@ export class ProductController {
 
   async create({ body }: RequestContract<ProductModel>): Promise<HttpResponse> {
     const createdProduct = await this.clientUseCase.create(body)
-    return successToCreate(createdProduct)
+    return successToCreate(createdProduct.value)
   }
 
   async load(): Promise<HttpResponse> {
     const loadProduct = await this.clientUseCase.load()
-    return success(loadProduct)
+    return success(loadProduct.value)
   }
 }
