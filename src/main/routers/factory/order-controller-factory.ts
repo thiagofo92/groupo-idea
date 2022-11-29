@@ -1,10 +1,12 @@
-import { OrderController } from '@/controllers'
-import { OrderService } from '@/services'
+import { OrderController, ProductController } from '@/controllers'
+import { ClientService, OrderService, ProductService } from '@/services'
 import { OrderUseCase } from '@/use-case'
 
 export function orderControllerFactory() {
-  const service = new OrderService()
-  const usecase = new OrderUseCase(service)
+  const orderService = new OrderService()
+  const clientService = new ClientService()
+  const producService = new ProductService()
+  const usecase = new OrderUseCase(orderService, clientService, producService)
   const controller = new OrderController(usecase)
 
   return controller
