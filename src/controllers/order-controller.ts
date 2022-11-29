@@ -13,7 +13,7 @@ export class OrderController {
 
   async create({ body }: RequestContract<OrderModel>): Promise<HttpResponse> {
     const createdOrder = await this.clientUseCase.create(body)
-    
+
     if(createdOrder.isRight()) return successToCreate(createdOrder)
 
     if(createdOrder.value instanceof OrderUseCaseClientNotFoundError) return badRequest('Client ID not found')
