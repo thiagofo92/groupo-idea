@@ -1,65 +1,30 @@
+# API de investimento
 
-# Backend | Desafio Técnico
+## Descriação do Projeto
+  Uma API para simular o investimento de um usuários, todos os investimentos são apenas salvos no banco de dados, a API não tem interação com serviços externos.
+  Os clientes podem ser cadastros e novos produtos podem ser inseridos na base de dados
 
-## Sobre a oportunidade
-    Temos vagas em aberto para diferentes níveis de conhecimento e achamos que um desafio poderá nos ajudar a te conhecer melhor.
-    Fique a vontade para implementar o que você conhece ou o que entende como necesário para o projeto mas desde que siga nossos requisitos.
-    
-## Desafio Técnico
-  ### O que precisa ser feito?
-    Elaborar uma Api Rest ou Graphql com Nodejs (javascript ou typescript) que irá permitir a realização de um investimento.
-    Necessário disponibilizar os métodos para Inclusão de Cliente, Produto e Ordem (Não é necessário os métodos para excluir/alterar/inativar)
-    Incluir validações necessárias para cada método
-    E se achar necessário fique a vontade para criar novos campos
-  
-  ### Métodos que devem ser criados
-  - Inclusão de Cliente
-  - Inclusão de Produto
-  - Inclusão de Ordem
-  - Consulta de Ordem
-
-  ### Será um diferencial as implementações de
-  - Testes
-  - Documentação
-  - Manual para instalação/execução
-
-  ### Detalhes técnicos
-    Cliente
-  | Field | Type |
-  |-|-|
-  | idCliente | Numérico |
-  | nome | Texto |
-  | cpf | Texto |
-  | dtNascimento | Data |
-  | ativo | Boolean |
+## Como utilizar o projeto
+  * Instalar o [NodeJS](https://nodejs.org/en/) (**versão utilizada no projeto v16.15.0**)
+  * Usar o gerênciador de pacotes de sua preferência para instalar os pacotes node, use o comando **npm install ou yarn**
+  * Instalar o [Docker](https://www.docker.com/)
+  * Instalar o [Docker compose](https://docs.docker.com/compose/install/)
+  * Depois ter feito as etapas anteriores execute o comando **npx docker:up ou yarn docker:up** para criar o container do **MySQL**
+  * Renomeie o arquivo .env.example para .env
+  * Execute o comando **npx migrate:create ou yarn migrate:create** para criar as tabelas no banco de dados
+  * Execute o comando **npx test ou yarn test** para verificar se está tudo funcionando
+  * Execute o comando **npx dev:server ou yarn dev:server** para iniciar o servidor
+  * Após o servidor ter sido iniciado acesse [Swagger API](https://localhost:4500/api-docs) para efetuar os testes
 
 
-    Produtos
-  | Field | Type |
-  |-|-|
-  | idProduto | Numérico |
-  | nome | Texto |
-  | ativo | Boolean |
+## Utilizar a API
+  Acesse a página do [Swagger API](https://localhost:4500/api-docs) para visualizar todas as rotas disponiveis e os dados para criação de dados de retorno.
+  O projeto também contém um arquivo do [Postman](https://www.postman.com/) para caso prefira utilizar o postman para efetuar as consultas.
+  A API possui um rate limit de 50 requisições por minuto
 
-    Ordens
-  | Field | Type |
-  |-|-|
-  | idTransacao | Numérico |
-  | idCliente | Numérico |
-  | idProduto | Texto |
-  | valorCompra | Numérico |
-  | qtdCompra | Numérico |
-  | totalCompra | Numérico |
-  | dataOrdem | Data |
-
-### Nossa avaliação será baseada em
-  * Código desenvolvido (Pode caprichar nos comentários caso seja necessário)
-  * Script de banco (Migration também vale se quiser)
-  * Boas práticas de mercado
-  * Criação e organização dos arquivos da solução
-
-### Como enviar o desafio
-  * Faça o fork desse desafio
-  * Crie um repositório privado no seu github para o projeto e adicione como colaborador o usuário que enviamos
-  * Após concluir seu trabalho faça um push e nos avise por e-mail para o recrutador
-  
+## Padrões usados
+  * SRP [Single Responsiblity Principle](https://medium.com/desenvolvendo-com-paixao/o-que-%C3%A9-solid-o-guia-completo-para-voc%C3%AA-entender-os-5-princ%C3%ADpios-da-poo-2b937b3fc530)
+  * DIP [Dependency Inversion Principle](https://medium.com/desenvolvendo-com-paixao/o-que-%C3%A9-solid-o-guia-completo-para-voc%C3%AA-entender-os-5-princ%C3%ADpios-da-poo-2b937b3fc530)
+  * MVC [Model View Controller](https://www.google.com/search?q=mvc&oq=mvc&aqs=chrome..69i57.1874j0j9&sourceid=chrome&ie=UTF-8)
+  * Port And Adapter [Arquitetura Hexagonal](https://medium.com/bemobi-tech/ports-adapters-architecture-ou-arquitetura-hexagonal-b4b9904dad1a)
+  * Either handler error [Either](https://livebook.manning.com/concept/functional-programming/either)
