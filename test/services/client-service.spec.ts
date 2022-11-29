@@ -45,5 +45,41 @@ describe('# Service client test', () => {
     expect(clientLoaded.value.length).toBeGreaterThan(0)
   })
 
+  test('Load client by ID from MySQL', async () => {
+    const clientService = new ClientService()
+    const clientEntity = new ClientEntity({
+      name: faker.name.fullName(),
+      birthday: faker.date.birthdate({ min: 18, max: 65, mode: 'age'}),
+      cpf: '111111111'
+    })
+    const clientCreated = await clientService.create(clientEntity)
+
+    if(clientCreated.isLeft()) throw clientCreated.value
+
+    const clientLoaded = await clientService.loadById(clientCreated.value.idCliente)
+
+    if(clientLoaded.isLeft()) throw clientLoaded.value
+
+    expect(clientLoaded.value).not.toBeNull()
+    expect(clientLoaded.value?.nome).toStrictEqual(clientEntity.name)
+  })
+
+  test('Client not found from MySQL', async () => {
+    const clientService = new ClientService()
+    const clientEntity = new ClientEntity({
+      name: faker.name.fullName(),
+      birthday: faker.date.birthdate({ min: 18, max: 65, mode: 'age'}),
+      cpf: '111111111'
+    })
+    const clientCreated = await clientService.create(clientEntity)
+
+    if(clientCreated.isLeft()) throw clientCreated.value
+    const clientLoaded = await clientService.loadById(0)
+
+    if(clientLoaded.isLeft()) throw clientLoaded.value
+
+    expect(clientLoaded.value).toBeNull()
+  })
+
   test.todo('Error to load client from MySQL')
 })
