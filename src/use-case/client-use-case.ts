@@ -14,10 +14,10 @@ export class ClientUseCase implements ClientUseCaseContract {
 
     const client = new ClientEntity({
       name: data.nome,
-      cpf: data.cpf,
+      cpf: data.cpf.replaceAll(/[^0-9]/g, ''),
       birthday: data.dtNascimento
     })
-
+  
     if(!client.legalAge()) return left(new ClientCreateUseCaseError('Under the age'))
     
     const result = await this.clientService.create(client)
