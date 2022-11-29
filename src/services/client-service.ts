@@ -1,25 +1,27 @@
 import { ClientEntity } from '@/domain/entities'
 import { Either, left, right } from '@/shared/errors/Either'
-import { ClientCreateModel, ClientCreateResponseModel } from '@/use-case/model'
+import { ClientCreateResponseModel } from '@/use-case/model'
 import { ClientServiceContract } from './contract/client-contract'
 import { ClientCreateServiceError, ClientLoadServiceError } from './error'
+import { Prisma } from './db/prisma'
 
 export class ClientService implements ClientServiceContract  {
-  async create(): Promise<Either<ClientCreateServiceError, ClientCreateResponseModel>> {
+  async create(data: ClientEntity): Promise<Either<ClientCreateServiceError, ClientCreateResponseModel>> {
     try {
-      const result: ClientEntity = {
-        name: '',
-        cpf: '',
-        birthday: new Date(new Date().setFullYear(1992)),
-        active: true,
-        legalAge: function (): boolean {
-          throw new Error('Function not implemented.')
+      const createdClient = await Prisma.client.create({
+        data: {
+          name: data.name,
+          cpf: data.cpf,
+          birthday: data.birthday,
+          active: data.active
         }
+      })
+      const formatedClient: ClientCreateResponseModel = {
+        idCliente: createdClient.id,
+        nome: createdClient.name
       }
-      const formatedResult: ClientCreateModel = {
 
-      }
-      return right(result)
+      return right(formatedClient)
     } catch (error: any) {
       return left(new ClientCreateServiceError(error.message))
     }
@@ -27,16 +29,12 @@ export class ClientService implements ClientServiceContract  {
 
   async load(): Promise<Either<ClientLoadServiceError, ClientCreateResponseModel[]>> {
     try {
-      const result: ClientEntity = {
-        name: '',
-        cpf: '',
-        birthday: new Date(new Date().setFullYear(1992)),
-        active: true,
-        legalAge: function (): boolean {
-          throw new Error('Function not implemented.')
-        }
-      }
-      return right([result])
+      const clients = await Prisma.client.findMany()
+      const formated = clients.map<ClientCreateResponseModel>(item => ({
+        idCliente: item.id,
+        nome: item.name
+      }))
+      return right(formated)
     } catch (error: any) {
       return left(new ClientCreateServiceError(error.message))
     }
