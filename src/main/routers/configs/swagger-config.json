@@ -1,3 +1,390 @@
 {
-  
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API de test Grupo IDEA",
+    "description": "API para clientes efetuarem investimentos, para ser feito o investimento o client deve estar cadastrado no banco e o produto deve existir no banco de dados. A API possui um limite de 50 requisições por minuto",
+    "version": "1.0.0",
+    "contact": {
+      "email": "thiago_hyd@hotmail.com"
+    }
+  },
+  "tags": [
+    {
+      "name": "Client",
+      "description": "Creation client and Load clients"
+    },
+    {
+      "name": "Product",
+      "description": "Creation product and Load products"
+    },
+    {
+      "name": "Order",
+      "description": "Creation order and Load orders"
+    }
+  ],
+  "paths": {
+    "/api/client/create": {
+      "post": {
+        "tags": ["Client"],
+        "description": "Criação de um cliente",
+        "requestBody": {
+          "description": "Dados necessários para cadastrar o cliente",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#components/schemas/RequestClient"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Cadastro realizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#components/schemas/ResponseCreatedClient"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Dados invalidos para o cadastro"
+          },
+          "500": {
+            "description": "Erro interno"
+          }
+        }
+      }
+    },
+    "/api/client/load": {
+      "get": {
+        "tags": ["Client"],
+        "description": "Carregar os clientes",
+        "responses": {
+          "200": {
+            "description": "Clientes carregados com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#components/schemas/ResponseLoadClient"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno"
+          }
+        }
+      }
+    },
+    "/api/product/create": {
+      "post": {
+        "tags": ["Product"],
+        "description": "Criação de um produto",
+        "requestBody": {
+          "description": "Dados necessários para cadastrar o produto",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#components/schemas/RequestProduct"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Cadastro realizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#components/schemas/ResponseCreatedProduct"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Paramêtro invalido"
+          },
+          "500": {
+            "description": "Erro interno"
+          }
+        }
+      }
+    },
+    "/api/product/load": {
+      "get": {
+        "tags": ["Product"],
+        "description": "Carregar os produtos",
+        "responses": {
+          "200": {
+            "description": "Produtos carregados com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#components/schemas/ResponseLoadProduct"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno"
+          }
+        }
+      }
+    },
+    "/api/order/create": {
+      "post": {
+        "tags": ["Order"],
+        "description": "Criação de um ordem de compra",
+        "requestBody": {
+          "description": "Dados necessários para iniciar uma ordem de compra",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#components/schemas/RequestOrder"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Ordem de compra cadastrada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#components/schemas/ResponseCreatedOrder"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Paramêtro invalido"
+          },
+          "500": {
+            "description": "Erro interno"
+          }
+        }
+      }
+    },
+    "/api/order/load": {
+      "get": {
+        "tags": ["Order"],
+        "description": "Carregar ordem de compras",
+        "responses": {
+          "200": {
+            "description": "Ordens de compra carregadas com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#components/schemas/ResponseLoadOrder"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "RequestClient": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Nome da pessoa",
+            "example": "Johnny b goode"
+          },
+          "CPF": {
+            "type": "string",
+            "description": "CPF da pessoa",
+            "example": "111-111-111.11"
+          },
+          "dtNascimento": {
+            "type": "string",
+            "description": "Data de nascimento da pessoa",
+            "example": "15-12-1958"
+          }
+        }
+      },
+      "ResponseCreatedClient": {
+        "type": "object",
+        "properties": {
+          "nome": {
+            "type": "string",
+            "description": "Nome da pessoa",
+            "example": "Johnny b goode"
+          },
+          "idCliente": {
+            "type": "integer",
+            "description": "ID do cliente",
+            "example": 1
+          }
+        }
+      },
+      "ResponseLoadClient": {
+        "type": "array",
+        "items": {
+          "properties": {
+            "nome": {
+              "type": "string",
+              "description": "Nome da pessoa",
+              "example": "Johnny b goode"
+            },
+            "idCliente": {
+              "type": "integer",
+              "description": "ID do cliente",
+              "example": 1
+            }
+          }
+        }
+      },
+      "RequestProduct": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Nome do produto",
+            "example": "LCI"
+          },
+          "active": {
+            "type": "boolean",
+            "description": "Se o produto vai ser ativado",
+            "example": true
+          }
+        }
+      },
+      "ResponseCreatedProduct": {
+        "type": "object",
+        "properties": {
+          "idProduct": {
+            "type": "integer",
+            "description": "ID do produto",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "description": "Nome do produto",
+            "example": "LCI"
+          },"active": {
+            "type": "boolean",
+            "description": "Se o produto está ativo ou não",
+            "example": true
+          }
+        }
+      },
+      "ResponseLoadProduct": {
+        "type": "array",
+        "items": {
+          "properties": {
+            "idProduct": {
+              "type": "integer",
+              "description": "ID do produto",
+              "example": 1
+            },
+            "name": {
+              "type": "string",
+              "description": "Nome do produto",
+              "example": "LCI"
+            },"active": {
+              "type": "boolean",
+              "description": "Se o produto está ativo ou não",
+              "example": true
+            }
+          }
+        }
+      },
+      "RequestOrder": {
+        "type": "object",
+        "properties": {
+          "idClient": {
+            "type": "integer",
+            "description": "ID do cliente",
+            "example": 1
+          },
+          "idProduct": {
+            "type": "integer",
+            "description": "ID do cliente",
+            "example": 1
+          },
+          "purchasesPrice": {
+            "type": "integer",
+            "description": "ID do cliente",
+            "example": 79.98
+          },
+          "purchasesCount": {
+            "type": "integer",
+            "description": "ID do cliente",
+            "example": 1
+          }
+        }
+      },
+      "ResponseCreatedOrder": {
+        "type": "object",
+        "properties": {
+          "idTransaction": {
+            "type": "integer",
+            "description": "ID da transação",
+            "example": 1
+          },
+          "purchasesPrice": {
+            "type": "integer",
+            "description": "Valor de compra",
+            "example": 79.98
+          },
+          "purchasesCount": {
+            "type": "integer",
+            "description": "Quantidade comprada",
+            "example": 1
+          },
+          "purchasesTotalPrice": {
+            "type": "integer",
+            "description": "Valor total pago",
+            "example": 79.98
+          },
+          "createdAt": {
+            "type": "string",
+            "description": "Data da compra",
+            "example": "2022-11-29T14:26:19.332Z"
+          }
+        }
+      },
+      "ResponseLoadOrder": {
+        "type": "array",
+        "items": {
+          "properties": {
+            "idTransaction": {
+              "type": "integer",
+              "description": "ID da transação",
+              "example": 1
+            },
+            "purchasesPrice": {
+              "type": "integer",
+              "description": "Valor de compra",
+              "example": 79.98
+            },
+            "purchasesCount": {
+              "type": "integer",
+              "description": "Quantidade comprada",
+              "example": 1
+            },
+            "purchasesTotalPrice": {
+              "type": "integer",
+              "description": "Valor total pago",
+              "example": 79.98
+            },
+            "createdAt": {
+              "type": "string",
+              "description": "Data da compra",
+              "example": "2022-11-29T14:26:19.332Z"
+            }
+          }
+        }
+      }
+    }
+  }
 }
