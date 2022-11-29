@@ -1,5 +1,3 @@
-import { OrderEntity } from '@/domain/entities'
-
 export type OrderCreateModel = {
   idClient: number
   idProduct: number
