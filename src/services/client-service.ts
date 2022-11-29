@@ -39,4 +39,25 @@ export class ClientService implements ClientServiceContract  {
       return left(new ClientCreateServiceError(error.message))
     }
   }
+
+  async loadById(id: number): Promise<Either<ClientLoadServiceError, ClientCreateResponseModel | null>> {
+    try {
+      const clients = await Prisma.client.findUnique({
+        where: {
+          id
+        }
+      })
+
+      if(!clients) return right(null)
+
+      const formatedClient: ClientCreateResponseModel = {
+        idCliente: clients.id,
+        nome: clients.name
+      }
+
+      return right(formatedClient)
+    } catch (error: any) {
+      return left(new ClientCreateServiceError(error.message))
+    }
+  }
 }

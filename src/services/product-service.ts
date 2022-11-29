@@ -6,7 +6,7 @@ import { Prisma } from './db/prisma'
 import { ProductCreateResponseModel } from '@/use-case/model'
 export class ProductService implements ProductServiceContract {
   private readonly productEntity: ProductEntity [] = []
-  async create (data: ProductEntity): Promise<Either<ProductCreateServiceError, ProductEntity>> {
+  async create (data: ProductEntity): Promise<Either<ProductCreateServiceError, ProductCreateResponseModel>> {
     try {
       const createdProduct = await Prisma.product.create({
         data: {
@@ -26,7 +26,7 @@ export class ProductService implements ProductServiceContract {
     }
   }
 
-  async load (): Promise<Either<ProductLoadServiceError, ProductEntity[]>> {
+  async load (): Promise<Either<ProductLoadServiceError, ProductCreateResponseModel[]>> {
     try {
       const loadProduct = await Prisma.product.findMany()
 
@@ -35,6 +35,28 @@ export class ProductService implements ProductServiceContract {
         name: item.name,
         active: item.active
       }))
+
+      return right(formated)
+    } catch (error: any) {
+      return left(new ProductLoadServiceError(error.message))
+    }
+  }
+
+  async loadById (id: number): Promise<Either<ProductLoadServiceError, ProductCreateResponseModel | null>> {
+    try {
+      const loadProduct = await Prisma.product.findUnique({
+        where: {
+          id
+        }
+      })
+
+      if(!loadProduct) return right(null) 
+
+      const formated = {
+        idProduct: loadProduct.id,
+        name: loadProduct.name,
+        active: loadProduct.active
+      }
 
       return right(formated)
     } catch (error: any) {
