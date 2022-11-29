@@ -9,7 +9,7 @@ export class ClientServiceMock implements ClientServiceContract {
   private clientMock: ClientEntity[] = []
   async create(data: ClientEntity): Promise<Either<ClientCreateServiceError, ClientCreateResponseModel>> {
     try {
-      data.idClient = 1
+      data.idClient = this.clientMock.length + 1
       this.clientMock.push(data)
       const clientView = new ClientViews()
       const resultView = clientView.fromEntity(data)
