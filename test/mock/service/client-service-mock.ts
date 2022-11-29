@@ -6,7 +6,17 @@ import { ClientCreateResponseModel } from '@/use-case/model'
 import { ClientViews } from '@/views'
 
 export class ClientServiceMock implements ClientServiceContract {
-  private clientMock: ClientEntity[] = []
+  private clientMock: ClientEntity[] = [{
+    idClient: 1,
+    active: true,
+    birthday: new Date('12-12-1990'),
+    cpf: '11111111',
+    name: 'Test',
+    legalAge() {
+      return true
+    },
+  }]
+
   async create(data: ClientEntity): Promise<Either<ClientCreateServiceError, ClientCreateResponseModel>> {
     try {
       data.idClient = this.clientMock.length + 1
@@ -23,6 +33,20 @@ export class ClientServiceMock implements ClientServiceContract {
     try {
       const clientView = new ClientViews()
       const resultView = this.clientMock.map<ClientCreateResponseModel>(item => clientView.fromEntity(item))
+      return right(resultView)
+    } catch (error: any) {
+      return left(new ClientCreateServiceError(error.message))
+    }
+  }
+
+  async loadById(id: number): Promise<Either<ClientLoadServiceError, ClientCreateResponseModel | null>> {
+    try {
+      const client = this.clientMock.find(item => item.idClient === id)
+      const clientView = new ClientViews()
+      if(!client) return right(null) 
+      
+      const resultView = clientView.fromEntity(client)
+
       return right(resultView)
     } catch (error: any) {
       return left(new ClientCreateServiceError(error.message))
