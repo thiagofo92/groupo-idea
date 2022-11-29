@@ -3,15 +3,19 @@ import { faker } from '@faker-js/faker'
 import { left } from '@/shared/errors/Either'
 import { OrderUseCase } from '@/use-case'
 import { OrderCreateServiceError, OrderLoadServiceError } from '@/services/error'
-import { OrderServiceMock } from '../mock/service'
+import { ClientServiceMock, OrderServiceMock, ProductServiceMock } from '../mock/service'
 import { OrderCreateModel } from './model'
+import { OrderUseCaseClientNotFoundError, OrderUseCaseProductNotFoundError } from '@/use-case/error/order-error'
 
 function factoryClienUseCase() {
   const orderService = new OrderServiceMock()
-  const sut = new OrderUseCase(orderService)
+  const clientService = new ClientServiceMock()
+  const productService = new ProductServiceMock()
+  const sut = new OrderUseCase(orderService, clientService, productService)
+
   const ordertMock: OrderCreateModel = {
-    idClient: faker.datatype.number(),
-    idProduct: faker.datatype.number(),
+    idClient: 1,
+    idProduct: 1,
     purchasesPrice: 79.98,
     purchasesCount: faker.datatype.number({ min: 1, max: 5 }),
   }
@@ -65,5 +69,23 @@ describe('# Use case create a order', () => {
     vi.spyOn(orderService, 'load').mockResolvedValueOnce(left(new OrderLoadServiceError('Test mock service')))
     const loadClient = await sut.load()
     expect(loadClient.value).instanceOf(OrderLoadServiceError)
+  })
+
+  test('Fail to create the order, because the client not exist in DB', async () => {
+    const { sut, ordertMock } = factoryClienUseCase()
+    const mock = Object.create(ordertMock)
+    mock.idClient = 2
+
+    const loadClient = await sut.create(mock)
+    expect(loadClient.value).instanceOf(OrderUseCaseClientNotFoundError)
+  })
+
+  test('Fail to create the order, because the product not exist in DB', async () => {
+    const { sut, ordertMock } = factoryClienUseCase()
+    const mock = Object.create(ordertMock)
+    mock.idProduct = 2
+
+    const createdOrder = await sut.create(mock)
+    expect(createdOrder.value).instanceOf(OrderUseCaseProductNotFoundError)
   })
 })
