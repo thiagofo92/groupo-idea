@@ -15,7 +15,6 @@ export function ExpressAdapter(controller: FunctionController) {
       response.status(result.statusCode).json(result.data)
     } catch (error) {
       console.log(error)
-      
       response.status(500).json({ message: 'Internal Error'})
     }
   }
