@@ -5,7 +5,10 @@ import { success, successToCreate } from './helpers/http-respnse'
 import { ProductModel } from './models'
 
 export class ProductController {
-  constructor(private clientUseCase: ProductUseCaseContract) {}
+  constructor(private clientUseCase: ProductUseCaseContract) {
+    this.create = this.create.bind(this)
+    this.load = this.load.bind(this)
+  }
 
   async create({ body }: RequestContract<ProductModel>): Promise<HttpResponse> {
     const createdProduct = await this.clientUseCase.create(body)
