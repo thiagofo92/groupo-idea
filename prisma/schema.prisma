@@ -35,9 +35,9 @@ model Order {
   id_client               Int
   id_product              Int
   purchases_price         Decimal @db.Decimal(10, 2)
-  purchasesCount          Int
+  purchases_count         Int
   purchases_total_price   Decimal @db.Decimal(10, 2)
-  created_at               DateTime @default(now())
+  created_at              DateTime @default(now())
 
   product                 Product @relation(fields: [id_product], references: [id])
   client                  Client @relation(fields: [id_client], references: [id])
