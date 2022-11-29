@@ -10,8 +10,7 @@ const schema = Yup.object().shape({
 
 export async function clientCreateMiddleware(request: Request, response: Response, next: NextFunction) {
   try {
-    const isValid = await schema.validate(request.body, { abortEarly: false })
-    console.log(isValid)
+    await schema.validate(request.body, { abortEarly: false })
     
     next()
   } catch (error: any) {
